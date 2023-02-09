@@ -12,3 +12,5 @@ def removerUsuario():
     print('Usuario removido')
 
 removerUsuario()
+
+# Teste
