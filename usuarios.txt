@@ -1,3 +1,1 @@
-nome: manoel
-email: manoel@gmail.com
-Senha: 290mscac
+nome: Manoel, email: Manoel@gmail.com, Senha: absjfbk, Livros: Pequeno principe
