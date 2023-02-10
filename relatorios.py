@@ -13,8 +13,6 @@ def relatorio_usuario(user_dados, operacao):
 
     return template_usuario[operacao]
 
-
-
 def relatorio_livro(livro_dados, operacao):
 
     template_livro = {

@@ -43,3 +43,6 @@ livro = {'nome': 'pequeno principe'}
 print(livro['nome'])
 
 dado, carta, moeda = 20, 'yu-gi-oh', True
+
+from usuarios import *
+alterarUsuario()
