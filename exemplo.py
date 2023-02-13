@@ -16,30 +16,66 @@ print(soma)
 #  numero (inteiro, float) -> 14  -56   64.53   0
 
 
-texto = 'oi'
+# texto = 'oi'
 
-#        01234567      ---- indices
-texto = 'iae, vamos lá'.strip(',') # usando o . pode-se chamar um MÉTODO
+# #        01234567      ---- indices
+# texto = 'iae, vamos lá'.strip(',') # usando o . pode-se chamar um MÉTODO
 
-print(texto[3])    #aqui, podemos acessar apenas um caratere
+# print(texto[3])    #aqui, podemos acessar apenas um caratere
 
-print(texto[3:7])  #aqui, podemos acessar uma "fatia" da sting original
+# print(texto[3:7])  #aqui, podemos acessar uma "fatia" da sting original
 
 
-qualquer_coisa = '20'
+# qualquer_coisa = '20'
 
-print('quero escrever um numero' + qualquer_coisa + 'adfs')
+# print('quero escrever um numero' + qualquer_coisa + 'adfs')
 
-print(f'o numero é: {qualquer_coisa}')
+# print(f'o numero é: {qualquer_coisa}')
 
-variavel = [1,3,4,'12',[1,3,4]] 
+# variavel = [1,3,4,'12',[1,3,4]] 
 
-abc = "string"
+# abc = "string"
 
-print(print(2))
+# print(print(2))
 
-livro = {'nome': 'pequeno principe'}
+# livro = {'nome': 'pequeno principe'}
 
-print(livro['nome'])
+# print(livro['nome'])
 
-dado, carta, moeda = 20, 'yu-gi-oh', True
+# dado, carta, moeda = 20, 'yu-gi-oh', True
+
+
+
+
+
+
+
+
+caminho = 'bley.txt'
+
+with open(caminho, 'a+') as arquivo:
+    texto = 'tipo=devolver.dia="2021-02-03"\n'
+
+    arquivo.write(texto)
+
+# with open(caminho, 'r') as arquivo:
+
+#     arquivo_carregado = arquivo.read()
+
+#     dados = arquivo_carregado.split('\n')
+#     dados.pop()
+#     # print(arquivo_carregado)
+#     # print(dados)
+
+# for item in dados:
+#     dado = item.split('.')
+#     # print(dado)
+
+#     for subdado in dado[:-1]:
+#         separacao = subdado.index('=')
+        
+#         nome = ''.join(subdado.split('=')[1])
+#         print(nome)
+
+
+
