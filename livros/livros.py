@@ -1,158 +1,178 @@
-livro = []
-# Variável para marcar uma alteração na agenda
-alterada = False
-
-def pede_titulo():
-    return input("Titulo: ")
+  
+caminho = 'livros.txt'
+lista_de_livros = []
 
 
-def pede_autor():
-    return input("Autor(a): ")
-
-
-def mostra_dados(titulo, autor):
-    print(f"Titulo: {titulo}; Autor(a): {autor}")
-
-
-def pede_nome_arquivo():
-    return input("Nome do arquivo: ")
-
-
-def pesquisa(titulo):
-    mtitulo = titulo.lower()
-    for p, e in enumerate(livro):
-        if e[0].lower() == mtitulo:
-            return p
-    return None
-
-
-def novo():
-    global livro, alterada
-    titulo = pede_titulo()
-    autor = pede_autor()
-    livro.append([titulo, autor])
-    alterada = True
+def questionario():
+    titulo = input("Titulo: ").lower() or 'SemTítulo'
+    autor =  input("Autor(a): ").lower() or 'SemAutor'
+    codigo =  input("Código: ")
     
+    try:
+        codigo = int(codigo)
+    except:
+        print('entrada de código inválida.')
+    
+    return [titulo, autor, codigo]
+
+
+
+def rescrever_livros():
+    
+    lista_de_livros = []
+    
+    with open(caminho, 'w') as arquivo:
+        print('.............')
+    
+    for n in lista_de_livros:
+    
+        titulo, autor, codigo = n
+    
+        entrada = f'titulo={titulo}.autor={autor}.codigo={codigo}\n'
+
+        with open(caminho, 'a+') as arquivo:
+            arquivo.write(entrada)
+
+
+
+def carregar_livros():
+  
+    with open(caminho, 'r') as arquivo:
+
+        arquivo_carregado = arquivo.read()
+
+        dados = arquivo_carregado.split('\n')
+        dados.pop()
+
+
+    for item in dados:
+        dado = item.split('.')
+        livro_dados = [x for y in dado for x in y.split('=')[:-1]]
+        lista_de_livros.append(livro_dados)
+
+
 
 def confirma(operação):
     while True:
-        opção = input(f"Confirma {operação} (S/N)? ").upper()
-        if opção in "SN":
-            return opção
+        opcao = input(f"Confirma {operação} (S/N)? ").upper()
+        if opcao in "SN":
+            return opcao
         else:
             print("Resposta inválida. Escolha S ou N.")
 
 
-def apaga():
-    global agenda
-    titulo = pede_titulo()
-    p = pesquisa(titulo)
-    if p is not None:
-        if confirma("apagamento") == "S":
-            del livro[p]
-            alterada = True
-    else:
-        print("Título não encontrado.")
+
+def novo_livro():
+    operacao = 'cadastro_de_livro'
+
+    titulo, autor, codigo = questionario()
+
+    entrada = f'titulo={titulo}.autor={autor}.codigo={codigo}\n'
+
+    resposta = confirma(operacao)
+
+    if resposta:
+
+        with open(caminho, 'a+') as arquivo:
+
+            arquivo.write(entrada)
+
+
+
+def pesquisa():
+
+    dados_procurados = questionario()
+
+    procurados = []
+
+    for x in lista_de_livros:
+        for y in x:
+            if y in dados_procurados:
+                procurados.append(x)
+
+    if len(procurados) == 0:
+        print('nada encontrado')
+
+    print('Os livros encontrados para a sua pesquisa:')
+
+    for n in procurados:
+        print(f'{n[0]}, {n[1]}, {n[2]}')
     
+    return procurados
+
+
+
+def apaga_livro():
+
+    operacao = 'apagar'
+    lista = pesquisa()
+    codigo = input('digite o codigo do livro a ser deletado: ')
+
+    for n in lista:
+        if codigo in n:
+
+            resposta = confirma()
+
+            if resposta == 'S':
+                for x in lista_de_livros:
+                    if codigo in x:
+                        lista.pop(lista_de_livros.index(x))
+                        break
+                rescrever_livros()
+
     
-def altera():
-    p = pesquisa(pede_titulo())
-    if p is not None:
-        titulo = livro[p][0]
-        autor = livro[p][1]
-        print("Encontrado:")
-        mostra_dados(titulo, autor)
-        titulo = pede_titulo()
-        autor = pede_autor()
-        if confirma("alteração") == "S":
-            livro[p] = [titulo, autor]
-            alterada = True
-    else:
-        print("Título não encontrado.")
 
+def altera_livro():
 
-def lista():
-    print("\nlivro\n\n------")
-    # Usamos a função enumerate para obter a posição do livro
-    for posição, e in enumerate(livro):
-        # Imprimimos a posição, sem saltar linha
-        print(f"Posição: {posição}", end="")
-        mostra_dados(e[0], e[1])
-    print("------\n")
+    operacao = 'alteração'
+    lista = pesquisa()
+    codigo = input('digite o codigo do livro a ser alterado: ')
+    novos_dados = questionario()
 
+    for n in lista:
+        if codigo in n:
 
-def lê_última_lista_gravada():
-    última = última_lista()
-    if última is not None:
-        leia_arquivo(última)
+            resposta = confirma()
 
+            if resposta == 'S':
+                for x in lista_de_livros:
+                    if codigo in x:
+                        x = novos_dados
+                        break
+                
+                rescrever_livros()
 
-def última_lista():
-    try:
-        arquivo = open("ultima lista.dat", "r", encoding="utf-8")
-        última = arquivo.readline()[:-1]
-        arquivo.close()
-    except FileNotFoundError:
-        return None
-    return última
-
-
-def atualiza_última(nome):
-    arquivo = open("ultima lista.dat", "w", encoding="utf-8")
-    arquivo.write(f"{nome}\n")
-    arquivo.close()
-
-
-def grava():
-    global alterada
-    if not alterada:
-        print("Você não alterou a lista. Deseja gravá-la mesmo assim?")
-        if confirma("gravação") == "N":
-            return
-    print("Gravar\n------")
-    nome_arquivo = pede_nome_arquivo()
-    arquivo = open(nome_arquivo, "w", encoding="utf-8")
-    for e in livro:
-        arquivo.write(f"{e[0]}#{e[1]}\n")
-    arquivo.close()
-    alterada = False
-
-
-def valida_faixa_inteiro(pergunta, inicio, fim):
-    while True:
-        try:
-            valor = int(input(pergunta))
-            if inicio <= valor <= fim:
-                return valor
-        except ValueError:
-            print(f"Valor inválido, favor digitar entre {inicio} e {fim}")
 
 
 def menu():
+
     print("""
-   1 - Novo
-   2 - Altera
-   3 - Apaga
-   4 - Lista
-   5 - Grava
+   1 - Cadastrar novo livro
+   2 - Alterar dados de um livro
+   3 - Apagar livro
+   4 - buscar
    
-   0 - Sai
+   0 - Sair
 """)
-    print(f"\ntitulos de livro: {len(livro)}\n")
-    return valida_faixa_inteiro("Escolha uma opção: ", 0, 6)
 
+    opcao = input('Sua opção: ')
 
-while True:
-    opção = menu()
-    if opção == 0:
-        break
-    elif opção == 1:
-        novo()
-    elif opção == 2:
-        altera()
-    elif opção == 3:
-        apaga()
-    elif opção == 4:
-        lista()
-    elif opção == 5:
-        grava()
+    try:
+        opcao = int(opcao)
+    except:
+        print('entrada inválida.')
+
+    while True:
+        
+        if opcao == 0:
+            break
+        elif opcao == 1:
+            novo_livro()
+        elif opcao == 2:
+            altera_livro()
+        elif opcao == 3:
+            apaga_livro()
+        elif opcao== 4:
+            pesquisa()
+        else:
+            print('entrada inválida')

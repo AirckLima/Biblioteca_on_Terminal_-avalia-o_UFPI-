@@ -47,16 +47,18 @@ print(soma)
 
 
 
+n = input() or 0
+
+print(n==False)
 
 
 
+# caminho = 'bley.txt'
 
-caminho = 'bley.txt'
+# with open(caminho, 'a+') as arquivo:
+#     texto = 'tipo=devolver.dia="2021-02-03"\n'
 
-with open(caminho, 'a+') as arquivo:
-    texto = 'tipo=devolver.dia="2021-02-03"\n'
-
-    arquivo.write(texto)
+#     arquivo.write(texto)
 
 # with open(caminho, 'r') as arquivo:
 
